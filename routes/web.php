@@ -1,9 +1,10 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\ChatController;
-use App\Http\Controllers\CustomerController; // Import Controller Customer
+use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 // Halaman Utama JALIN (Bisa diakses oleh publik tanpa login)
 Route::get('/', function () {
-    return view('welcome');
+    return view('login');
 });
 
 
@@ -48,9 +49,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
 
     // 1. Jalur Dashboard untuk Admin JALIN
-    Route::get('/admin/dashboard', function () {
-        return view('dashboard.admin');
-    });
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::post('/admin/vendor/verifikasi/{id}', [AdminController::class, 'verifikasiVendor'])->name('admin.vendor.verifikasi');
+    Route::post('/admin/layanan/verifikasi/{id}', [AdminController::class, 'verifikasiLayanan'])->name('admin.layanan.verifikasi');
 
     // 2. Dashboard Customer (Calon Pengantin) Utama & Katalog Belanja
     Route::get('/customer/dashboard', [CustomerController::class, 'index'])->name('customer.dashboard');
