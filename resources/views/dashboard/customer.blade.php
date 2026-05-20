@@ -476,6 +476,6 @@
                 btns.editProfile.className = "w-full text-sm font-cute text-center text-white bg-gradient-to-r from-yellow-500 to-amber-400 p-4 rounded-2xl shadow-md transition border-b-4 border-yellow-600";
             }
         }
-    </script>
+</script>
 </body>
 </html>

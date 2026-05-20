@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 // Halaman Utama JALIN (Bisa diakses oleh publik tanpa login)
 Route::get('/', function () {
-    return view('login');
+    return view('welcome');
 });
 
 
