@@ -55,8 +55,11 @@ Route::middleware(['auth'])->group(function () {
     // 2. Dashboard Customer (Calon Pengantin) Utama & Katalog Belanja
     Route::get('/customer/dashboard', [CustomerController::class, 'index'])->name('customer.dashboard');
 
-    // ⚙️ 🎯 REVISI SINGLE PAGE: Proses Simpan Perubahan Profil Customer di URL Dashboard Utama
+    // ⚙️ Proses Simpan Perubahan Profil Customer di URL Dashboard Utama (Single Page)
     Route::post('/customer/dashboard', [CustomerController::class, 'updateProfile'])->name('customer.profile.update');
+
+    // 🤖 🎯 TAMBAHAN BARU: Rute AJAX Endpoint untuk JALIN Meta AI Consultant
+    Route::post('/customer/tanya-ai', [CustomerController::class, 'tanyaAi'])->name('customer.tanya.ai');
 
     // 🛒 Rute Fitur Keranjang & Pesanan Saya Ala Shopee Customer
     Route::get('/customer/keranjang', [CustomerController::class, 'showKeranjang'])->name('customer.keranjang');

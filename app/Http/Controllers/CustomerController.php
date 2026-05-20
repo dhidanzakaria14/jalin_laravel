@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class CustomerController extends Controller
 {
@@ -48,23 +49,21 @@ class CustomerController extends Controller
             ->orderBy('py.tgl_bayar', 'desc')
             ->get();
 
-        // 🎯 MENGARAH KE OPSI B: resources/views/dashboard/customer.blade.php
         return view('dashboard.customer', compact('user', 'countBooking', 'queryOrders', 'queryPayment', 'katalogLayanan'));
     }
 
     /**
-     * 🛒 MENAMPILKAN HALAMAN KERANJANG BELANJA CUSTOMER
+     * 🛒 MENAMPILKAN DATA ITEM KERANJANG BELANJA
      */
     public function showKeranjang()
     {
         $user = Auth::user();
 
-        // Contoh penarikan data item keranjang milik user aktif (sesuaikan nama tabelmu jika berbeda)
         $itemsKeranjang = DB::table('keranjang as k')
             ->join('layanan as l', 'k.id_layanan', '=', 'l.id_layanan')
             ->join('users as u', 'l.id_vendor', '=', 'u.id')
             ->where('k.id_user', $user->id)
-            ->select('k.id_keranjang', 'l.nama_layanan', 'l.harga', 'l.foto_layanan', 'u.nama_toko')
+            ->select('k.id_keranjang', 'l.nama_layanan', 'l.harga', 'l.gambar', 'u.nama_toko')
             ->get();
 
         return view('dashboard.customer_keranjang', compact('user', 'itemsKeranjang'));
@@ -79,7 +78,6 @@ class CustomerController extends Controller
             'id_layanan' => 'required'
         ]);
 
-        // Masukkan data ke dalam tabel pembantu keranjang
         DB::table('keranjang')->insert([
             'id_user' => Auth::id(),
             'id_layanan' => $request->id_layanan,
@@ -87,17 +85,16 @@ class CustomerController extends Controller
             'updated_at' => now()
         ]);
 
-        return redirect()->back()->with('success', 'Hore! Berhasil masuk keranjang belanjaanmu 🛒');
+        return redirect()->back()->with('success', 'Hore! Berhasil masuk keranjang belanjaanmu 🛒✨');
     }
 
     /**
-     * 📦 MENAMPILKAN HALAMAN UTAH LIST "PESANAN SAYA" CUSTOMER
+     * 📦 MENAMPILKAN HALAMAN LIST "PESANAN SAYA" CUSTOMER
      */
     public function showPesanan()
     {
         $user = Auth::user();
 
-        // Tarik semua daftar status pesanan lengkap milik customer terkait
         $semuaPesanan = DB::table('pesanan as p')
             ->join('detail_pesanan as dp', 'p.id_pesanan', '=', 'dp.id_pesanan')
             ->join('layanan as l', 'dp.id_layanan', '=', 'l.id_layanan')
@@ -108,5 +105,100 @@ class CustomerController extends Controller
             ->get();
 
         return view('dashboard.customer_pesanan', compact('user', 'semuaPesanan'));
+    }
+
+    /**
+     * 💾 PROSES UPDATE PROFILE VERSI AMAN ANTI-EROR DATABASE
+     */
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'nama_lengkap' => 'required|string|max:255',
+            'no_telp'      => 'nullable|string|max:15',
+            'alamat'       => 'nullable|string',
+            'password'     => 'nullable|string|min:6|confirmed',
+            'foto_profil'  => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+        ]);
+
+        $dataUpdate = [
+            'nama_lengkap' => $request->nama_lengkap,
+            'updated_at'   => now()
+        ];
+
+        // Jalankan baris di bawah ini jika kamu sudah menambahkan kolom no_telp & alamat di tabel users phpMyAdmin
+        // $dataUpdate['no_telp'] = $request->no_telp;
+        // $dataUpdate['alamat'] = $request->alamat;
+
+        if ($request->filled('password')) {
+            $dataUpdate['password'] = Hash::make($request->password);
+        }
+
+        if ($request->hasFile('foto_profil')) {
+            $file = $request->file('foto_profil');
+            $namaFoto = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads'), $namaFoto);
+            $dataUpdate['foto_profil'] = $namaFoto;
+        }
+
+        DB::table('users')->where('id', $user->id)->update($dataUpdate);
+
+        return redirect()->route('customer.dashboard')->with('success', 'Data profil pernikahanmu berhasil diperbarui! 🌸✨');
+    }
+
+    /**
+     * 🤖 META AI SIMULATION ENGINE: CONTEXTUAL MATCHING & RANDOM DATABASE RESPONSE
+     */
+    public function tanyaAi(Request $request)
+    {
+        $pesanUser = strtolower($request->input('pesan', ''));
+
+        $scores = [
+            'budget'   => 0,
+            'katering' => 0,
+            'dekor'    => 0,
+            'baju'     => 0,
+            'sapaan'   => 0,
+        ];
+
+        // Kamus padanan kata penilai konteks obrolan
+        $dictionary = [
+            'budget'   => ['api', 'hemat', 'murah', 'budget', 'biaya', 'dana', 'uang', 'dompet', 'modal', 'celengan', 'anggaran', 'pangkas', 'tips hemat'],
+            'katering' => ['katering', 'catering', 'makan', 'konsumsi', 'prasmanan', 'menu', 'hidangan', 'gubuk', 'food', 'porsi', 'rasa', 'testing'],
+            'dekor'    => ['dekor', 'dekorasi', 'bunga', 'panggung', 'tenda', 'pelaminan', 'gedung', 'estetik', 'rustic', 'backdrop', 'lampu', 'venue'],
+            'baju'     => ['baju', 'gaun', 'rias', 'makeup', 'mua', 'kebaya', 'pakaian', 'pengantin', 'wajah', 'dandan', 'adatan'],
+            'sapaan'   => ['halo', 'hai', 'tes', 'p', 'pagi', 'siang', 'malam', 'assalamualaikum', 'permisi', 'min', 'jalin']
+        ];
+
+        foreach ($dictionary as $category => $keywords) {
+            foreach ($keywords as $word) {
+                if (str_contains($pesanUser, $word)) {
+                    $scores[$category] += 2;
+                }
+            }
+        }
+
+        arsort($scores);
+        $keywordTerpilih = key($scores);
+        $skorTertinggi = current($scores);
+
+        if ($skorTertinggi == 0) {
+            $keywordTerpilih = 'default';
+        }
+
+        // Ambil baris data secara acak sesuai bobot kata kunci terdekat
+        $dataAi = DB::table('ai_knowledge')
+            ->where('keyword', $keywordTerpilih)
+            ->inRandomOrder()
+            ->first();
+
+        if ($dataAi) {
+            $jawaban = $dataAi->jawaban;
+        } else {
+            $jawaban = "Wah, pertanyaan yang menarik, Kak! 💡 Sebagai **JALIN AI Wedding Assistant**, aku paling jago kalau diajak ngobrol seputar persiapan pernikahan. \n\nYuk, coba tanyakan hal seputar **tips hemat budget**, **katering prasmanan**, **dekorasi pelaminan**, atau **gaun pengantin** biar aku bisa kupas tuntas secara acak dari database-ku! 🌸✨";
+        }
+
+        return response()->json(['jawaban' => nl2br($jawaban)]);
     }
 }
