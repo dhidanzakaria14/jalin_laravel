@@ -197,7 +197,7 @@
                         <div class="bg-white p-6 rounded-2xl border border-pink-50 shadow-sm card-hover">
                             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                                 <div class="flex items-center gap-4">
-                                    <div class="w-14 h-14 bg-pink-100 rounded-full overflow-hidden flex-shrink-0">
+                                    <div class="w-14 h-14 bg-pink-100 rounded-full overflow-hidden shrink-0">
                                         <img src="{{ $vendor->foto_profil ? asset('uploads/'.$vendor->foto_profil) : 'https://ui-avatars.com/api/?name='.urlencode($vendor->nama_lengkap).'&background=d14d72&color=fff&size=56' }}" class="w-full h-full object-cover">
                                     </div>
                                     <div>
@@ -264,7 +264,7 @@
                         <div class="bg-white p-6 rounded-2xl border border-pink-50 shadow-sm card-hover">
                             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                                 <div class="flex items-center gap-4">
-                                    <div class="w-16 h-16 bg-pink-50 rounded-xl overflow-hidden flex-shrink-0">
+                                    <div class="w-16 h-16 bg-pink-50 rounded-xl overflow-hidden shrink-0">
                                         <img src="{{ $layanan->gambar ? asset('uploads/'.$layanan->gambar) : 'https://ui-avatars.com/api/?name='.urlencode(substr($layanan->nama_layanan,0,1)).'&background=ffb7c5&color=fff&size=64' }}" class="w-full h-full object-cover">
                                     </div>
                                     <div>
