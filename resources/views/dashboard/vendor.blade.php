@@ -281,60 +281,203 @@
         </div>
     </div>
 
-    <div id="modalEditKategori" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm text-left">
-        <div class="bg-white w-full max-w-md rounded-[3rem] p-10 shadow-2xl text-left">
-            <h3 class="text-xl font-bold italic mb-6">Ubah Nama Kategori</h3>
-            <form id="formEditKategori" action="#" method="POST" class="space-y-5">
-                @csrf
-                @method('PUT')
-                <div>
-                    <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-2 ml-1">Nama Kategori</label>
-                    <input type="text" id="edit_nama_kategori" name="nama_kategori" required class="w-full px-5 py-3.5 rounded-xl border border-gray-100 outline-none focus:ring-2 focus:ring-pink-100 text-sm bg-gray-50/50">
-                </div>
-                <button type="submit" class="w-full bg-blue-500 text-white py-4 rounded-2xl font-bold uppercase text-xs shadow-md hover:bg-blue-600 transition">Simpan Perubahan</button>
-                <button type="button" onclick="closeModal('modalEditKategori')" class="w-full text-gray-400 text-xs font-bold uppercase mt-2">Batal</button>
-            </form>
-        </div>
+
+<div id="modalEditKategori" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm text-left">
+
+    <div class="bg-white w-full max-w-md rounded-[3rem] p-10 shadow-2xl text-left">
+
+        <!-- JUDUL MODAL -->
+        <h3 class="text-xl font-bold italic mb-6">
+            Ubah Nama Kategori
+        </h3>
+
+        <!-- FORM EDIT KATEGORI -->
+        <form id="formEditKategori"
+              action="#"
+              method="POST"
+              class="space-y-5">
+
+            @csrf
+            @method('PUT')
+
+            <!-- INPUT NAMA KATEGORI -->
+            <div>
+
+                <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-2 ml-1">
+
+                    Nama Kategori
+
+                </label>
+
+                <input type="text"
+                       id="edit_nama_kategori"
+                       name="nama_kategori"
+
+                       placeholder="Masukkan nama kategori"
+
+                       required
+                       class="w-full px-5 py-3.5 rounded-xl border border-gray-100 outline-none focus:ring-2 focus:ring-pink-100 text-sm bg-gray-50/50">
+
+            </div>
+
+            <!-- TOMBOL SIMPAN -->
+            <button type="submit"
+                    class="w-full bg-blue-500 text-white py-4 rounded-2xl font-bold uppercase text-xs shadow-md hover:bg-blue-600 transition">
+
+                Simpan Perubahan
+
+            </button>
+
+            <!-- TOMBOL BATAL -->
+            <button type="button"
+                    onclick="closeModal('modalEditKategori')"
+                    class="w-full text-gray-400 text-xs font-bold uppercase mt-2">
+
+                Batal
+
+            </button>
+
+        </form>
     </div>
+</div>
+
 
     <div id="modalEditLayanan" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm text-left">
-        <div class="bg-white w-full max-w-lg rounded-[3.5rem] p-12 shadow-2xl overflow-y-auto max-h-[90vh] text-left">
-            <h3 class="text-2xl font-bold italic mb-8">Edit Detail Katalog</h3>
+    
+    <div class="bg-white w-full max-w-lg rounded-[3.5rem] p-12 shadow-2xl overflow-y-auto max-h-[90vh] text-left">
 
-            <form id="formEditLayanan" action="#" method="POST" enctype="multipart/form-data" class="space-y-5 text-left">
-                @csrf
+        <h3 class="text-2xl font-bold italic mb-8">
+            Edit Detail Katalog
+        </h3>
 
-                <div class="space-y-1">
-                    <label class="text-xs font-bold text-gray-400 uppercase">Nama Layanan</label>
-                    <input type="text" id="edit_nama_layanan" name="nama_layanan" required class="w-full px-6 py-4 rounded-2xl border bg-gray-50 outline-none text-sm">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-xs font-bold text-gray-400 uppercase">Harga Jasa (Rp)</label>
-                    <input type="number" id="edit_harga_layanan" name="harga" oninput="hitungDPEdit()" required class="w-full px-6 py-4 rounded-2xl border bg-gray-50 outline-none text-sm">
-                </div>
+        <form id="formEditLayanan"
+              action="#"
+              method="POST"
+              enctype="multipart/form-data"
+              class="space-y-5 text-left">
 
-                <div class="space-y-1">
-                    <label class="text-xs font-bold text-gray-400 uppercase">Minimal DP (%)</label>
-                    <input type="number" id="edit_dp_layanan" name="minimal_dp_percent" oninput="hitungDPEdit()" min="0" max="100" class="w-full px-6 py-4 rounded-2xl border bg-gray-50 outline-none text-sm">
-                    <p class="text-xs text-pink-500 font-semibold mt-1" id="label_dp_edit">Nominal DP: Rp 0</p>
-                </div>
+            @csrf
 
-                <div class="space-y-1">
-                    <label class="text-xs font-bold text-gray-400 uppercase">Deskripsi</label>
-                    <textarea id="edit_deskripsi_layanan" name="deskripsi" rows="3" class="w-full px-6 py-4 rounded-2xl border bg-gray-50 outline-none text-sm resize-none"></textarea>
-                </div>
+            <!-- INPUT NAMA LAYANAN -->
+            <div class="space-y-1">
 
-                <div class="space-y-1">
-                    <label class="text-xs font-bold text-[#d14d72] uppercase block">Ganti Foto Jasa (Opsional)</label>
-                    <input type="file" name="foto" class="text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-pink-50 file:text-[#d14d72] hover:file:bg-pink-100 cursor-pointer">
-                    <p class="text-[10px] text-gray-400 mt-1 italic">*Biarkan kosong jika tidak ingin mengubah foto katalog lama.</p>
-                </div>
+                <label class="text-xs font-bold text-gray-400 uppercase">
+                    Nama Layanan
+                </label>
 
-                <button type="submit" class="w-full bg-[#d14d72] text-white py-5 rounded-3xl font-bold uppercase text-[10px] shadow-lg">Simpan Perubahan</button>
-                <button type="button" onclick="closeModal('modalEditLayanan')" class="w-full text-gray-400 text-[10px] font-bold uppercase mt-2">Batal</button>
-            </form>
-        </div>
+                <input type="text"
+                       id="edit_nama_layanan"
+                       name="nama_layanan"
+
+                       placeholder="Masukkan nama layanan"
+
+                       required
+                       class="w-full px-6 py-4 rounded-2xl border bg-gray-50 outline-none text-sm">
+
+            </div>
+
+            <!-- INPUT HARGA -->
+            <div class="space-y-1">
+
+                <label class="text-xs font-bold text-gray-400 uppercase">
+                    Harga Jasa (Rp)
+                </label>
+
+                <input type="number"
+                       id="edit_harga_layanan"
+                       name="harga"
+
+                       placeholder="Masukkan harga jasa"
+
+                       oninput="hitungDPEdit()"
+                       required
+                       class="w-full px-6 py-4 rounded-2xl border bg-gray-50 outline-none text-sm">
+
+            </div>
+
+            <!-- INPUT MINIMAL DP -->
+            <div class="space-y-1">
+
+                <label class="text-xs font-bold text-gray-400 uppercase">
+                    Minimal DP (%)
+                </label>
+
+                <input type="number"
+                       id="edit_dp_layanan"
+                       name="minimal_dp_percent"
+
+                       placeholder="Contoh: 20"
+
+                       oninput="hitungDPEdit()"
+                       min="0"
+                       max="100"
+                       class="w-full px-6 py-4 rounded-2xl border bg-gray-50 outline-none text-sm">
+
+                <p class="text-xs text-pink-500 font-semibold mt-1"
+                   id="label_dp_edit">
+
+                    Nominal DP: Rp 0
+
+                </p>
+
+            </div>
+
+            <!-- INPUT DESKRIPSI -->
+            <div class="space-y-1">
+
+                <label class="text-xs font-bold text-gray-400 uppercase">
+                    Deskripsi
+                </label>
+
+                <textarea id="edit_deskripsi_layanan"
+                          name="deskripsi"
+                          rows="3"
+
+                          placeholder="Masukkan deskripsi layanan"
+
+                          class="w-full px-6 py-4 rounded-2xl border bg-gray-50 outline-none text-sm resize-none"></textarea>
+
+            </div>
+
+            <!-- INPUT FOTO -->
+            <div class="space-y-1">
+
+                <label class="text-xs font-bold text-[#d14d72] uppercase block">
+                    Ganti Foto Jasa (Opsional)
+                </label>
+
+                <input type="file"
+                       name="foto"
+                       class="text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-pink-50 file:text-[#d14d72] hover:file:bg-pink-100 cursor-pointer">
+
+                <p class="text-[10px] text-gray-400 mt-1 italic">
+
+                    *Biarkan kosong jika tidak ingin mengubah foto katalog lama.
+
+                </p>
+
+            </div>
+
+            <!-- TOMBOL SIMPAN -->
+            <button type="submit"
+                    class="w-full bg-[#d14d72] text-white py-5 rounded-3xl font-bold uppercase text-[10px] shadow-lg">
+
+                Simpan Perubahan
+
+            </button>
+
+            <!-- TOMBOL BATAL -->
+            <button type="button"
+                    onclick="closeModal('modalEditLayanan')"
+                    class="w-full text-gray-400 text-[10px] font-bold uppercase mt-2">
+
+                Batal
+
+            </button>
+
+        </form>
     </div>
+</div>
 
     <script>
         function switchSection(sectionId, element) {
